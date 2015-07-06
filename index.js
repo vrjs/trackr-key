@@ -24,6 +24,22 @@ exports.make = function(THREE) {
             channel = channel || 0
             this.channels[channel].controlled.remove(obj);
         },
+        scale : function (channel, scale) {
+            if (scale === undefined ) {
+                return this.channels[channel].scale;
+            }
+            else {
+                this.channels[channel].scale = scale;
+            }
+        }, 
+        offset : function (channel, offset) {
+            if (offset === undefined ) {
+                return this.channels[channel].offset;
+            }
+            else {
+                this.channels[channel].offset = offset;
+            }
+        },
         handle_key: function(event) {
             if (event.which >= 48 && event.which <= 57) {
                 this.active = event.which - 48;
