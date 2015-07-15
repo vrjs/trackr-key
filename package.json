@@ -1,6 +1,6 @@
 {
   "name": "vrjs-trackr-key",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "keyboard tracker for vrjs",
   "main": "index.js",
   "scripts": {
