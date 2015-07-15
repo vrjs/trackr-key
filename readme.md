@@ -3,7 +3,7 @@ This is an npm module for the [vrjs]() framework that implements a standard trac
 
 ## Installation
 
-`npm install vrjs-trackr-g4`
+`npm install vrjs-trackr-key`
 
 ## Usage
 
