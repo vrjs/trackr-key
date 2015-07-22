@@ -14,5 +14,8 @@
   },
   "keywords": [
     "vrjs"
-  ]
+  ],
+  "dependencies": {
+    "key-emit": "0.0.2"
+  }
 }

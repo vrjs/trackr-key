@@ -1,3 +1,5 @@
+var key = require('key-emit')(document);
+
 exports.make = function(THREE) {
     var sensors = [];
     for (var i = 0; i < 10; i++ ) {
@@ -40,46 +42,8 @@ exports.make = function(THREE) {
                 this.sensors[sensor].offset = offset;
             }
         },
-        handle_key: function(event) {
-            if (event.which >= 48 && event.which <= 57) {
-                this.active = event.which - 48;
-                console.log("Switched keyboard trackr sensor to " + this.active);
-                return;
-            }
-
-            var make_rotation = function(vector, sign) {
-                var quaternion = new THREE.Quaternion();
-                quaternion.setFromAxisAngle(vector, sign * Math.PI / 2 / 20);
-                return quaternion
-            }
-            var sensor = this.sensors[this.active];
-            var ramount = Math.PI / 2 / 20;
-
-            if (event.which === 88 && event.shiftKey) { // X moves + in x direction
-                sensor.position.x += 1;
-            } else if (event.which === 88) {
-                sensor.position.x -= 1;
-            } else if (event.which === 89 && event.shiftKey) {
-                sensor.position.y += 1;
-            } else if (event.which === 89) {
-                sensor.position.y -= 1;
-            } else if (event.which === 90 && event.shiftKey) {
-                sensor.position.z += 1;
-            } else if (event.which === 90) {
-                sensor.position.z -= 1;
-            } else if (event.which == 72 && event.shiftKey) {
-                sensor.orientation.multiply(make_rotation(new THREE.Vector3(0, 1, 0), 1));
-            } else if (event.which == 72) {
-                sensor.orientation.multiply(make_rotation(new THREE.Vector3(0, 1, 0), -1));
-            } else if (event.which == 74 && event.shiftKey) {
-                sensor.orientation.multiply(make_rotation(new THREE.Vector3(1, 0, 0), 1));
-            } else if (event.which == 74) {
-                sensor.orientation.multiply(make_rotation(new THREE.Vector3(1, 0, 0), -1));
-            } else if (event.which == 78 && event.shiftKey) {
-                sensor.orientation.multiply(make_rotation(new THREE.Vector3(0, 0, 1), 1));
-            } else if (event.which == 78) {
-                sensor.orientation.multiply(make_rotation(new THREE.Vector3(0, 0, 1), -1));
-            }
+        active_sensor : function() {
+            return this.sensors[this.active];
         },
         apply_poll: function() {
             for (var c = 0; c < 10; c++ ) {
@@ -95,9 +59,59 @@ exports.make = function(THREE) {
         }
     }
 
-    document.addEventListener("keydown", function(e) {
-        tracker.handle_key(e)
+    var ramount = Math.PI / 2 / 20;
+    var make_rotation = function(vector, sign) {
+        var quaternion = new THREE.Quaternion();
+        quaternion.setFromAxisAngle(vector, sign * Math.PI / 2 / 20);
+        return quaternion
+    }
+
+    
+    key.down.on("0-9", function(sensor){
+        tracker.active = sensor;
+        console.log("Switched keyboard trackr sensor to " + tracker.active);
     });
+    key.down.on("X", function() {
+        tracker.active_sensor().position.x += 1;
+    });
+    key.down.on("x", function() {
+        tracker.active_sensor().position.x -= 1;
+    });
+    key.down.on("Y", function() {
+        tracker.active_sensor().position.y += 1;
+    });
+    key.down.on("y", function() {
+        tracker.active_sensor().position.y -= 1;
+    });
+    key.down.on("Z", function() {
+        tracker.active_sensor().position.z += 1;
+    });
+    key.down.on("z", function() {
+        tracker.active_sensor().position.z -= 1;
+    });
+
+
+    key.down.on("left", function() {
+        tracker.active_sensor().orientation.multiply(make_rotation(new THREE.Vector3(0, 1, 0), 1));
+    });
+    key.down.on("right", function() {
+        tracker.active_sensor().orientation.multiply(make_rotation(new THREE.Vector3(0, 1, 0), -1));
+    });
+    key.down.on("up", function() {
+        tracker.active_sensor().orientation.multiply(make_rotation(new THREE.Vector3(1, 0, 0), 1));
+    });
+    key.down.on("down", function() {
+        tracker.active_sensor().orientation.multiply(make_rotation(new THREE.Vector3(1, 0, 0), -1));
+    });
+    key.down.on("<", function() {
+        tracker.active_sensor().orientation.multiply(make_rotation(new THREE.Vector3(0, 0, 1), 1));
+    });
+    key.down.on(">", function() {
+        tracker.active_sensor().orientation.multiply(make_rotation(new THREE.Vector3(0, 0, 1), -1));
+    });
+
+
+            
 
     return tracker;
 
